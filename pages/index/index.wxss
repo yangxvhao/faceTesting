@@ -18,5 +18,10 @@
 
 .image {
   margin-top: 20px;
-   width: 80%; 
+  width: 80%; 
+}
+
+.faceResult{
+  margin:40rpx;
+  font-size: 44rpx;
 }

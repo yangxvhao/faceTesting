@@ -6,6 +6,12 @@ Page({
   data: {
     tempFilePaths: '',
     userInfo: {},
+    tableID: 35661, 
+    faceResult:'',
+    error:false,
+    errorApi:false,
+    errorUpload:false,
+    accessToken:''
   },
   //事件处理函数
   bindViewTap: function() {
@@ -15,7 +21,7 @@ Page({
   },
   onLoad: function () {
     wx.BaaS.login().then(res => {
-      console.log(res)
+      // console.log(res)
       this.setData({
         userInfo: wx.BaaS.storage.get('userinfo')
       })
@@ -32,8 +38,15 @@ Page({
       }
     })
   },
+
   chooseimage: function () {
     var that = this;
+    this.setData({
+      faceResult:'',
+      error: false,
+      errorApi: false,
+      errorUpload: false
+    })
     wx.showActionSheet({
       itemList: ['从相册中选择', '拍照'],
       itemColor: "#CED63A",
@@ -55,12 +68,89 @@ Page({
     wx.chooseImage({
       sizeType: ['original', 'compressed'],
       sourceType: [type],
+      count:1,
       success: function (res) {
-        console.log(res);
+        // console.log(res);
         that.setData({
           tempFilePaths: res.tempFilePaths[0],
         })
+        let MyFile = new wx.BaaS.File()
+        let fileParams = { filePath: res.tempFilePaths[0] }
+        let metaData = { categoryName: 'image' }
+        // let Product = new wx.BaaS.TableObject(35661)
+        // let product = Product.create()
+
+        MyFile.upload(fileParams, metaData).then(res => {
+          /*
+           * 注: 只要是服务器有响应的情况都会进入 success, 即便是 4xx，5xx 都会进入这里
+           * 如果上传成功则会返回资源远程地址,如果上传失败则会返回失败信息
+           */
+          // console.log(res)
+          // console.log(res.data.path)
+          that.faceTest(res.data.path, res.data.file)
+        }, err => {
+          this.setData({
+            errorUpload:true
+          })
+        })
       }
     })
+  },
+
+  faceTest:function (photoPath,photo){
+    this.getToken().then(res =>{
+      // console.log(res)
+      wx.BaaS.request({
+        url: 'https://aip.baidubce.com/rest/2.0/face/v3/detect?access_token=' + res,
+        method: 'POST',
+        data: { image:photoPath, image_type:'URL', face_field:'age,beauty,expression,faceshape,gender,glasses,race' }
+      }).then(res => {
+        let Product = new wx.BaaS.TableObject(35661)
+        let product = Product.create()
+        if (res.data.error_code != 0){
+          this.setData({
+            error:true
+          })
+        }
+        // console.log(res)
+        this.setData({
+          faceResult:res.data.result.face_list[0],
+        })
+        product.set('photo',photo)
+        product.set('face_result', JSON.stringify(res.data.result))
+        product.save()
+        // success
+      }, err => {
+        console.log(res)
+        // err
+        this.setData({
+          errorApi:true
+        })
+      })
+    })
+  },
+
+  getToken:function(){
+    return new Promise((reslove, reject) => {
+      if(this.data.accessToken){
+        reslove(this.data.accessToken)
+      }else{
+        wx.BaaS.request({
+          url: 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=yGDbW8cYPPVr5Csu5gnBX4IH&client_secret=cxr9oNAqUxVtG0el480nn3qZecTGKNt1',
+          method: 'GET',
+        }).then(res => {
+          // console.log(res.data.access_token)
+          this.setData({
+            accessToken: res.data.access_token
+          })
+          reslove(this.data.accessToken)
+        }, err => {
+          this.setData({
+            errorApi: true
+          })
+        })
+      }
+    })
+    
   }
 })

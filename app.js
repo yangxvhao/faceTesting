@@ -14,6 +14,6 @@ App({
 
   globalData: {
     clientId: '1a1b43185ef183a419ca', // 从 BaaS 后台获取 ClientID
-    tableId: 35620, // 从 https://cloud.minapp.com/dashboard/ 管理后台的数据表中获取
+    tableId: 35661, // 从 https://cloud.minapp.com/dashboard/ 管理后台的数据表中获取
   }
 })

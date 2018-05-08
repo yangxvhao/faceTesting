@@ -8,7 +8,23 @@
     <!-- </block> -->
   </view>
   <view class="image">
-    <button style="margin:90rpx;" bindtap="chooseimage">上传照片</button>
-    <image src="{{tempFilePaths }}" catchTap="chooseImageTap" mode="aspectFit" style="width: 100%; height: 450rpx" />
+    <button style="margin-bottom:20rpx;" bindtap="chooseimage">上传照片</button>
+    <block wx:if="{{tempFilePaths}}">
+      <image src="{{tempFilePaths }}" catchTap="chooseImageTap" mode="aspectFit" style="width: 100%; height: 450rpx" /> 
+    </block>
+    <view wx:if="{{faceResult}}">
+      <view class='faceResult' >识别结果(颜值区间(1-100))</view>
+      <view style='width:60%;margin-left:100rpx'>
+        <view><text>年龄：{{faceResult.age}}</text></view>
+        <view><text>颜值：{{faceResult.beauty}}</text></view>
+        <view><text>性别：{{faceResult.gender.type}}</text></view>
+        <view><text>脸型：{{faceResult.face_shape.type}}</text></view>
+        <view><text>人种：{{faceResult.race.type}}</text></view>
+        <!-- <view> <text>：{{faceResult.gender.type}}</text></view> -->
+      </view>
+    </view>
+    <view wx:if="{{error==true}}" style=' color: red'>照片不符合，请重新上传．</view>
+    <view wx:if="{{errorApi==true}}" style=' color: red'>内部故障，请联系开发者</view>
+    <view wx:if="{{errorUpload==true}}" style=' color: red'>上传失败，请检查网络或联系开发者</view>
   </view>
 </view>
