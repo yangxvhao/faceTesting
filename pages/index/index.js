@@ -1,7 +1,32 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+const Gender = {
+  1:{male:'男'},
+  2:{female:'女'}
+};
+const FaceShape = {
+  1: { square: '正方形' },
+  2: { triangle: '三角形' },
+  3: { oval: '椭圆'},
+  4: { heart: '心形' },
+  5: { round: '圆形' }
+};
+const RaceType = {
+  1: { yellow: '黄种人' },
+  2: { white: '白种人' },
+  3: { black: '黑种人' },
+  4: { arabs: '阿拉伯人' }
+};
+const EmotionType = {
+  1: { angry: '黄种人' },
+  2: { disgust: '白种人' },
+  3: { fear: '黑种人' },
+  4: { happy: '阿拉伯人' },
+  5: {sad:'伤心'},
+  6: {surprise: '惊讶'},
+  7: {neutral: '无情绪'}
+};
 Page({
   data: {
     tempFilePaths: '',
@@ -103,7 +128,7 @@ Page({
       wx.BaaS.request({
         url: 'https://aip.baidubce.com/rest/2.0/face/v3/detect?access_token=' + res,
         method: 'POST',
-        data: { image:photoPath, image_type:'URL', face_field:'age,beauty,expression,faceshape,gender,glasses,race' }
+        data: { image: photoPath, image_type: 'URL', face_field:'age,beauty,expression,faceshape,gender,glasses,race,emotion' }
       }).then(res => {
         let Product = new wx.BaaS.TableObject(35661)
         let product = Product.create()
