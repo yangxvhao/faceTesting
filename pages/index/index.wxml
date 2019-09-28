@@ -9,6 +9,7 @@
   </view>
   <view class="image">
     <button style="margin-bottom:20rpx;" bindtap="chooseimage">上传照片</button>
+    <button style="margin-bottom:20rpx;" bindtap="findPhotoList" data-variable="{{userInfo.id}}">查看历史</button>
     <block wx:if="{{tempFilePaths}}">
       <image src="{{tempFilePaths }}" catchTap="chooseImageTap" mode="aspectFit" style="width: 100%; height: 450rpx" /> 
     </block>
@@ -17,10 +18,10 @@
       <view style='width:60%;margin-left:100rpx'>
         <view><text>年龄：{{faceResult.age}}</text></view>
         <view><text>颜值：{{faceResult.beauty}}</text></view>
-        <view><text>性别：{{faceResult.gender.type}}</text></view>
-        <view><text>脸型：{{faceResult.face_shape.type}}</text></view>
-        <view><text>人种：{{faceResult.race.type}}</text></view>
-        <!-- <view> <text>：{{faceResult.gender.type}}</text></view> -->
+        <view><text>性别：{{Gender[faceResult.gender.type]}}</text></view>
+        <view><text>脸型：{{FaceShape[faceResult.face_shape.type]}}</text></view>
+        <view><text>人种：{{RaceType[faceResult.race.type]}}</text></view>
+        <view><text>情绪：{{EmotionType[faceResult.emotion.type]}}</text></view>
       </view>
     </view>
     <view wx:if="{{error==true}}" style=' color: red'>照片不符合，请重新上传．</view>

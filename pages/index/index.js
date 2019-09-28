@@ -1,32 +1,6 @@
 //index.js
 //获取应用实例
 const app = getApp()
-const Gender = {
-  1:{male:'男'},
-  2:{female:'女'}
-};
-const FaceShape = {
-  1: { square: '正方形' },
-  2: { triangle: '三角形' },
-  3: { oval: '椭圆'},
-  4: { heart: '心形' },
-  5: { round: '圆形' }
-};
-const RaceType = {
-  1: { yellow: '黄种人' },
-  2: { white: '白种人' },
-  3: { black: '黑种人' },
-  4: { arabs: '阿拉伯人' }
-};
-const EmotionType = {
-  1: { angry: '黄种人' },
-  2: { disgust: '白种人' },
-  3: { fear: '黑种人' },
-  4: { happy: '阿拉伯人' },
-  5: {sad:'伤心'},
-  6: {surprise: '惊讶'},
-  7: {neutral: '无情绪'}
-};
 Page({
   data: {
     tempFilePaths: '',
@@ -36,7 +10,34 @@ Page({
     error:false,
     errorApi:false,
     errorUpload:false,
-    accessToken:''
+    accessToken:'',
+    Gender :
+    {
+      'male': '男',
+      'female': '女'
+    },
+    FaceShape : 
+      { 'square': '正方形' ,
+      'triangle': '三角形' ,
+      'oval': '椭圆' ,
+      'heart': '心形' ,
+      'round': '圆形' 
+    },
+    RaceType : {
+      yellow: '黄种人' ,
+      white: '白种人' ,
+      black: '黑种人' ,
+      arabs: '阿拉伯人' 
+    },
+    EmotionType : {
+      angry: '生气' ,
+      disgust: '厌恶' ,
+      fear: '恐惧' ,
+      happy: '开心' ,
+      sad: '伤心' ,
+      surprise: '惊讶' ,
+      neutral: '平静' 
+    }
   },
   //事件处理函数
   bindViewTap: function() {
@@ -96,6 +97,9 @@ Page({
       count:1,
       success: function (res) {
         // console.log(res);
+        wx.showLoading({
+          title: '上传中...',
+        })
         that.setData({
           tempFilePaths: res.tempFilePaths[0],
         })
@@ -122,6 +126,23 @@ Page({
     })
   },
 
+  findPhotoList:function (event){
+    var id = event.currentTarget.dataset.variable;
+    console.log(id);
+    if(id){
+    wx.navigateTo({
+      url: 'photo?id=' + id,
+      success: function(){
+      }
+    })
+    }else{
+      wx.showModal({
+        title: '',
+        content: '授权个人信息后才可查看！',
+      })
+    }
+  },
+
   faceTest:function (photoPath,photo){
     this.getToken().then(res =>{
       // console.log(res)
@@ -137,9 +158,12 @@ Page({
             error:true
           })
         }
+        wx.hideLoading();
         // console.log(res)
         this.setData({
+         
           faceResult:res.data.result.face_list[0],
+        
         })
         product.set('photo',photo)
         product.set('face_result', JSON.stringify(res.data.result))

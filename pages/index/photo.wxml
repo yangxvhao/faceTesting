@@ -1,0 +1,25 @@
+<view class="container">
+  <loading hidden="{{!loading}}">加载中</loading>
+  <view style="margin:20rpx; font-size:60rpx">仅展示最近10条</view>
+
+  <block class="" wx:for="{{photoList}}" wx:key="id">
+    <view hover-class='hover-class' id="{{item.consumption_id}}" style='display:flex; height:220px;border-bottom: 1px solid #DBDBDB'>
+      <!--左边图片-->
+      <view style='width:380rpx; height:200px;'>
+        <image class='index-logo' style='width:350rpx; height:200px; margin:20rpx;' src="{{item.path}}"></image>
+      </view>
+      <!-- 右边内容 上下结构 -->
+      <view style='display:flex; flex-direction:column; margin:20rpx;'>
+        <label class='item_title'>年龄：{{item.result.age}}</label>
+        <label class='item_content'>颜值：{{item.result.beauty}}</label>
+        <label class='item_content'>性别：{{Gender[item.result.gender.type]}}</label>
+        <label class='item_content'>脸型：{{FaceShape[item.result.face_shape.type]}}</label>
+        <label class='item_content'>人种：{{RaceType[item.result.race.type]}}</label>
+        <label class='item_content'>情绪：{{EmotionType[item.result.emotion.type]}}</label>
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{error==true}}" style=' color: red'>照片不符合，请重新上传．</view>
+  <view wx:if="{{errorApi==true}}" style=' color: red'>内部故障，请联系开发者</view>
+  <view wx:if="{{errorUpload==true}}" style=' color: red'>上传失败，请检查网络或联系开发者</view>
+</view>

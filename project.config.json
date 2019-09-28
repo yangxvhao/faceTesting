@@ -10,8 +10,10 @@
 	"compileType": "miniprogram",
 	"libVersion": "1.9.94",
 	"appid": "wxd5f05fcdc6b02a46",
-	"projectname": "%2Fhome%2Fyangxvhao%2FIdeaProjects%2FfaceTesting",
+	"projectname": "faceTesting",
 	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
